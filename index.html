@@ -1,925 +1,249 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="theme-color" content="#0a0a1a" />
-
-<title>Repretel TV Pro</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="theme-color" content="#1a1a2e"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<title>Repretel TV</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    -webkit-tap-highlight-color:transparent;
+:root{
+  --bg: #f0f4ff;
+  --card-shadow: 0 8px 32px rgba(0,0,0,.13);
 }
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 
 html,body{
-    background:#0a0a1a;
-    height:100%;
-    overflow:hidden;
-    font-family:'Inter',sans-serif;
-    color:white;
+  width:100%;min-height:100vh;
+  background:var(--bg);
+  font-family:'Nunito',sans-serif;
+  display:flex;flex-direction:column;
+  align-items:center;
 }
 
-body{
-    display:flex;
-    flex-direction:column;
+/* subtle background pattern */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(100,140,255,.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 90%, rgba(255,100,100,.1) 0%, transparent 60%);
+  pointer-events:none;
 }
 
-.hidden{
-    display:none !important;
-}
-
-/* HEADER */
-
+/* ---- HEADER ---- */
 .header{
-    padding:16px 20px 10px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    flex-shrink:0;
+  width:100%;padding:28px 24px 12px;
+  text-align:center;
 }
 
-.header-left{
-    display:flex;
-    align-items:center;
-    gap:10px;
+.tv-icon{font-size:3rem;display:block;margin-bottom:6px;}
+
+.title{
+  font-size:2rem;font-weight:900;
+  color:#1a1a2e;letter-spacing:-.5px;
 }
 
-.live-dot{
-    width:10px;
-    height:10px;
-    border-radius:50%;
-    background:#ff4757;
-    animation:pulse 2s infinite;
+.subtitle{
+  font-size:1.05rem;color:#888;
+  margin-top:4px;font-weight:700;
 }
 
-@keyframes pulse{
-    0%,100%{
-        transform:scale(1);
-        opacity:1;
-    }
-    50%{
-        transform:scale(.7);
-        opacity:.5;
-    }
+/* ---- INSTRUCTIONS ---- */
+.instructions{
+  margin:16px 20px;
+  padding:16px 20px;
+  background:white;
+  border-radius:20px;
+  box-shadow:var(--card-shadow);
+  color:#555;
+  font-size:1rem;
+  font-weight:700;
+  line-height:1.6;
+  text-align:center;
+  max-width:400px;
+  width:calc(100% - 40px);
 }
+.instructions strong{color:#1a1a2e;}
 
-.header h1{
-    font-size:1.4rem;
-    font-weight:800;
-    background:linear-gradient(90deg,#ff4757,#ff7f50);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-}
-
-.cast-btn{
-    width:42px;
-    height:42px;
-    border:none;
-    border-radius:50%;
-    background:rgba(255,255,255,.08);
-    backdrop-filter:blur(20px);
-    -webkit-backdrop-filter:blur(20px);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    transition:.2s;
-}
-
-.cast-btn svg{
-    width:22px;
-    height:22px;
-    fill:white;
-}
-
-.cast-btn.connected svg{
-    fill:#2ed573;
-}
-
-.cast-btn:active{
-    transform:scale(.92);
-}
-
-/* VIDEO */
-
-.video-container{
-    position:relative;
-    width:100%;
-    aspect-ratio:16/9;
-    background:black;
-    overflow:hidden;
-    flex-shrink:0;
-}
-
-video{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-    background:black;
-}
-
-/* OVERLAY */
-
-.video-overlay{
-    position:absolute;
-    inset:0;
-    background:linear-gradient(to bottom,rgba(0,0,0,.2),rgba(0,0,0,.7));
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:14px;
-    z-index:5;
-}
-
-.big-play{
-    width:76px;
-    height:76px;
-    border-radius:50%;
-    background:rgba(255,255,255,.15);
-    border:2px solid rgba(255,255,255,.2);
-    backdrop-filter:blur(20px);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:2rem;
-    cursor:pointer;
-    transition:.2s;
-}
-
-.big-play:active{
-    transform:scale(.9);
-}
-
-.overlay-text{
-    color:rgba(255,255,255,.7);
-    font-size:.95rem;
-}
-
-/* CONTROLS */
-
-.controls{
-    position:absolute;
-    left:0;
-    right:0;
-    bottom:0;
-    padding:40px 16px 16px;
-    display:flex;
-    align-items:center;
-    gap:12px;
-    background:linear-gradient(transparent,rgba(0,0,0,.85));
-    opacity:0;
-    transition:.25s;
-    z-index:6;
-    pointer-events:none;
-}
-
-.video-container.show-controls .controls{
-    opacity:1;
-    pointer-events:auto;
-}
-
-.ctrl-btn{
-    width:38px;
-    height:38px;
-    border-radius:50%;
-    border:none;
-    background:rgba(255,255,255,.15);
-    backdrop-filter:blur(20px);
-    color:white;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    font-size:1rem;
-}
-
-.ctrl-btn:active{
-    background:rgba(255,255,255,.3);
-}
-
-.progress{
-    flex:1;
-    height:4px;
-    background:rgba(255,255,255,.15);
-    border-radius:50px;
-    overflow:hidden;
-}
-
-.progress-fill{
-    width:0%;
-    height:100%;
-    background:#ff4757;
-}
-
-/* LOADER */
-
-.loader{
-    position:absolute;
-    inset:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:rgba(0,0,0,.55);
-    z-index:7;
-}
-
-.spinner{
-    width:52px;
-    height:52px;
-    border:4px solid rgba(255,255,255,.15);
-    border-top-color:#ff4757;
-    border-radius:50%;
-    animation:spin 1s linear infinite;
-}
-
-@keyframes spin{
-    to{
-        transform:rotate(360deg);
-    }
-}
-
-/* CHANNELS */
-
+/* ---- CHANNELS ---- */
 .channels{
-    flex:1;
-    overflow-y:auto;
-    padding:16px;
+  width:100%;max-width:420px;
+  padding:8px 20px 40px;
+  display:flex;flex-direction:column;gap:18px;
 }
 
-.section-title{
-    color:#666;
-    font-size:.75rem;
-    text-transform:uppercase;
-    letter-spacing:1px;
-    margin-bottom:14px;
-    padding-left:4px;
-    font-weight:700;
+.channel-btn{
+  width:100%;border:none;cursor:pointer;
+  border-radius:28px;
+  padding:0;
+  box-shadow:var(--card-shadow);
+  transition:transform .12s, box-shadow .12s;
+  overflow:hidden;
+  position:relative;
+  -webkit-tap-highlight-color:transparent;
 }
 
-.channel{
-    width:100%;
-    border:none;
-    color:white;
-    display:flex;
-    align-items:center;
-    gap:14px;
-    padding:15px;
-    border-radius:18px;
-    margin-bottom:12px;
-    cursor:pointer;
-    background:rgba(255,255,255,.05);
-    backdrop-filter:blur(20px);
-    -webkit-backdrop-filter:blur(20px);
-    transition:.2s;
+.channel-btn:active{
+  transform:scale(.96);
+  box-shadow:0 4px 16px rgba(0,0,0,.15);
 }
 
-.channel:active{
-    transform:scale(.98);
+.channel-inner{
+  display:flex;align-items:center;
+  padding:22px 24px;
+  gap:20px;
 }
 
-.channel.active{
-    border:1px solid rgba(255,71,87,.5);
-    background:rgba(255,71,87,.12);
+/* Canal 6 */
+.ch6 .channel-inner{background:linear-gradient(135deg,#ff4757 0%,#ff6b35 100%);}
+/* Canal 11 */
+.ch11 .channel-inner{background:linear-gradient(135deg,#f9a825 0%,#ff7043 100%);}
+/* Canal 4 */
+.ch4 .channel-inner{background:linear-gradient(135deg,#26c6da 0%,#1565c0 100%);}
+
+.ch-number{
+  width:72px;height:72px;
+  border-radius:20px;
+  background:rgba(255,255,255,.22);
+  display:flex;align-items:center;justify-content:center;
+  font-size:2.2rem;font-weight:900;
+  color:white;flex-shrink:0;
+  text-shadow:0 2px 8px rgba(0,0,0,.2);
 }
 
-.logo{
-    width:54px;
-    height:54px;
-    border-radius:16px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:1.5rem;
-    font-weight:900;
-    position:relative;
-    flex-shrink:0;
+.ch-text{flex:1;text-align:left;}
+.ch-name{
+  font-size:1.6rem;font-weight:900;
+  color:white;
+  text-shadow:0 2px 8px rgba(0,0,0,.15);
+  line-height:1.1;
+}
+.ch-desc{
+  font-size:1rem;font-weight:700;
+  color:rgba(255,255,255,.75);
+  margin-top:4px;
 }
 
-.c6{
-    background:linear-gradient(135deg,#ff4757,#ff6348);
+.ch-arrow{
+  font-size:2rem;
+  color:rgba(255,255,255,.6);
+  font-weight:900;
 }
 
-.c11{
-    background:linear-gradient(135deg,#ffa502,#ff7f50);
+/* ---- TOAST ---- */
+.toast{
+  position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:#1a1a2e;color:white;
+  padding:14px 28px;border-radius:999px;
+  font-size:1rem;font-weight:700;
+  white-space:nowrap;
+  box-shadow:0 8px 32px rgba(0,0,0,.25);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1), opacity .3s;
+  opacity:0;pointer-events:none;
+  z-index:99;
 }
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
 
-.c4{
-    background:linear-gradient(135deg,#2ed573,#1e90ff);
-}
-
-.playing{
-    position:absolute;
-    bottom:-3px;
-    right:-3px;
-    width:18px;
-    height:18px;
-    border-radius:50%;
-    border:2px solid #0a0a1a;
-    background:#2ed573;
-    display:none;
-}
-
-.channel.active .playing{
-    display:block;
-}
-
-.info{
-    flex:1;
-}
-
-.name{
-    display:block;
-    font-weight:700;
-    font-size:1rem;
-}
-
-.desc{
-    display:block;
-    margin-top:3px;
-    font-size:.82rem;
-    color:#8d8d8d;
-}
-
-.arrow{
-    color:#666;
-    font-size:1.2rem;
-}
-
-.channel.active .arrow{
-    color:#ff4757;
-}
-
-/* BOTTOM */
-
-.bottom{
-    padding:14px 20px 24px;
-    text-align:center;
-    flex-shrink:0;
-}
-
-.bottom p{
-    color:#444;
-    font-size:.75rem;
-}
-
-.hint{
-    margin-top:10px;
-    background:rgba(255,255,255,.05);
-    padding:10px 16px;
-    border-radius:999px;
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    font-size:.8rem;
-    color:#999;
+/* ---- NOTE ---- */
+.note{
+  color:#aaa;font-size:.82rem;font-weight:700;
+  text-align:center;padding:0 24px 32px;
+  max-width:360px;line-height:1.6;
 }
 </style>
 </head>
-
 <body>
 
 <div class="header">
-    <div class="header-left">
-        <div class="live-dot"></div>
-        <h1>Repretel TV</h1>
-    </div>
-
-    <button class="cast-btn" id="castBtn">
-        <svg viewBox="0 0 24 24">
-            <path d="M2 16.1C2.58 16.1 3.05 16.58 3.05 17.15V19.9C3.05 20.48 2.58 20.95 2 20.95C1.42 20.95 0.95 20.48 0.95 19.9V17.15C0.95 16.58 1.42 16.1 2 16.1ZM6.5 14.55C6.5 15.13 6.03 15.6 5.45 15.6C4.88 15.6 4.4 15.13 4.4 14.55V19.9C4.4 20.48 4.88 20.95 5.45 20.95C6.03 20.95 6.5 20.48 6.5 19.9V14.55ZM9.35 12.35C9.35 12.93 8.88 13.4 8.3 13.4C7.73 13.4 7.25 12.93 7.25 12.35V19.9C7.25 20.48 7.73 20.95 8.3 20.95C8.88 20.95 9.35 20.48 9.35 19.9V12.35ZM21 3H3C1.9 3 1 3.9 1 5V8.75H3V5.1C3 5.04 3.04 5 3.1 5H20.9C20.96 5 21 5.04 21 5.1V18.9C21 18.96 20.96 19 20.9 19H15.25V21H21C22.1 21 23 20.1 23 19V5C23 3.9 22.1 3 21 3Z"/>
-        </svg>
-    </button>
+  <span class="tv-icon">📺</span>
+  <div class="title">Repretel TV</div>
+  <div class="subtitle">Tocá el canal para ver en tu TV</div>
 </div>
 
-<div class="video-container" id="videoContainer">
-
-    <video
-        id="player"
-        playsinline
-        webkit-playsinline
-        preload="none"
-    ></video>
-
-    <div class="loader hidden" id="loader">
-        <div class="spinner"></div>
-    </div>
-
-    <div class="video-overlay" id="overlay">
-        <div class="big-play" id="bigPlay">▶</div>
-        <div class="overlay-text">Tocá para reproducir</div>
-    </div>
-
-    <div class="controls" id="controls">
-        <button class="ctrl-btn" id="playPause">▶</button>
-
-        <div class="progress">
-            <div class="progress-fill" id="progressFill"></div>
-        </div>
-
-        <button class="ctrl-btn" id="pipBtn">▣</button>
-
-        <button class="ctrl-btn" id="fullscreenBtn">⛶</button>
-    </div>
+<div class="instructions">
+  <strong>¿Cómo funciona?</strong><br>
+  Tocá el canal que querés → se abre VLC → tocá el ícono 📡 de VLC para enviarlo al Chromecast
 </div>
 
 <div class="channels">
 
-    <div class="section-title">
-        Canales en vivo
+  <button class="channel-btn ch6" onclick="openChannel('https://alba-cr-repretel-c6.stream.mediatiquestream.com/index.m3u8','Canal 6')">
+    <div class="channel-inner">
+      <div class="ch-number">6</div>
+      <div class="ch-text">
+        <div class="ch-name">Canal 6</div>
+        <div class="ch-desc">Noticias y deportes</div>
+      </div>
+      <div class="ch-arrow">›</div>
     </div>
+  </button>
 
-    <button class="channel"
-        data-name="Canal 6"
-        data-url="https://alba-cr-repretel-c6.stream.mediatiquestream.com/index.m3u8">
+  <button class="channel-btn ch11" onclick="openChannel('https://alba-cr-repretel-c11.stream.mediatiquestream.com/index.m3u8','Canal 11')">
+    <div class="channel-inner">
+      <div class="ch-number">11</div>
+      <div class="ch-text">
+        <div class="ch-name">Canal 11</div>
+        <div class="ch-desc">Series y películas</div>
+      </div>
+      <div class="ch-arrow">›</div>
+    </div>
+  </button>
 
-        <div class="logo c6">
-            6
-            <div class="playing"></div>
-        </div>
-
-        <div class="info">
-            <span class="name">Canal 6</span>
-            <span class="desc">Noticias y deportes</span>
-        </div>
-
-        <div class="arrow">›</div>
-    </button>
-
-    <button class="channel"
-        data-name="Canal 11"
-        data-url="https://alba-cr-repretel-c11.stream.mediatiquestream.com/index.m3u8">
-
-        <div class="logo c11">
-            11
-            <div class="playing"></div>
-        </div>
-
-        <div class="info">
-            <span class="name">Canal 11</span>
-            <span class="desc">Series y películas</span>
-        </div>
-
-        <div class="arrow">›</div>
-    </button>
-
-    <button class="channel"
-        data-name="Canal 4"
-        data-url="https://alba-cr-repretel-c4.stream.mediatiquestream.com/index.m3u8">
-
-        <div class="logo c4">
-            4
-            <div class="playing"></div>
-        </div>
-
-        <div class="info">
-            <span class="name">Canal 4</span>
-            <span class="desc">Cultura y comunidad</span>
-        </div>
-
-        <div class="arrow">›</div>
-    </button>
+  <button class="channel-btn ch4" onclick="openChannel('https://alba-cr-repretel-c4.stream.mediatiquestream.com/index.m3u8','Canal 4')">
+    <div class="channel-inner">
+      <div class="ch-number">4</div>
+      <div class="ch-text">
+        <div class="ch-name">Canal 4</div>
+        <div class="ch-desc">Cultura y comunidad</div>
+      </div>
+      <div class="ch-arrow">›</div>
+    </div>
+  </button>
 
 </div>
 
-<div class="bottom">
-    <p>Costa Rica • Transmisión en vivo</p>
-
-    <div class="hint">
-        📡 Tocá arriba para transmitir a TV
-    </div>
+<div class="note">
+  Necesitás tener VLC instalado.<br>
+  Funciona con Chromecast en la misma red WiFi.
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
+<div class="toast" id="toast">📺 Abriendo VLC...</div>
 
 <script>
-const player = document.getElementById('player');
-const overlay = document.getElementById('overlay');
-const bigPlay = document.getElementById('bigPlay');
-const playPause = document.getElementById('playPause');
-const fullscreenBtn = document.getElementById('fullscreenBtn');
-const pipBtn = document.getElementById('pipBtn');
-const progressFill = document.getElementById('progressFill');
-const controls = document.getElementById('controls');
-const videoContainer = document.getElementById('videoContainer');
-const loader = document.getElementById('loader');
-const castBtn = document.getElementById('castBtn');
+function openChannel(url, name){
+  // Mostrar toast
+  const toast = document.getElementById('toast');
+  toast.textContent = '📺 Abriendo ' + name + ' en VLC...';
+  toast.classList.add('show');
+  setTimeout(()=>{ toast.classList.remove('show'); }, 2500);
 
-const channels = document.querySelectorAll('.channel');
+  // Intentar abrir con VLC via deep link
+  // vlc:// es el esquema que VLC registra en Android/iOS
+  const vlcUrl = 'vlc://' + url.replace('https://','');
 
-let hls = null;
-let currentUrl = null;
-let currentChannel = null;
-let controlsTimeout = null;
-let wakeLock = null;
+  // Intentar primero con intent de Android (más confiable)
+  const intentUrl = 'intent://' + url.replace('https://','') +
+    '#Intent;scheme=https;package=org.videolan.vlc;' +
+    'S.title=' + encodeURIComponent(name) + ';end';
 
-let castSession = null;
-let isCasting = false;
+  // Detectar Android
+  const isAndroid = /android/i.test(navigator.userAgent);
+  const isIOS     = /iphone|ipad|ipod/i.test(navigator.userAgent);
 
-/* ========= LOADER ========= */
-
-function showLoader(){
-    loader.classList.remove('hidden');
+  if(isAndroid){
+    window.location.href = intentUrl;
+  } else if(isIOS){
+    window.location.href = vlcUrl;
+  } else {
+    // PC — abrir directo
+    window.open(url, '_blank');
+  }
 }
-
-function hideLoader(){
-    loader.classList.add('hidden');
-}
-
-/* ========= CONTROLS ========= */
-
-function showControls(){
-    videoContainer.classList.add('show-controls');
-
-    clearTimeout(controlsTimeout);
-
-    controlsTimeout = setTimeout(()=>{
-        videoContainer.classList.remove('show-controls');
-    },3000);
-}
-
-videoContainer.addEventListener('click',showControls);
-
-/* ========= PLAY ========= */
-
-function updatePlayButtons(){
-    const icon = player.paused ? '▶' : '⏸';
-
-    playPause.textContent = icon;
-    bigPlay.textContent = icon;
-}
-
-async function togglePlay(){
-
-    if(player.paused){
-        try{
-            await player.play();
-        }catch(e){}
-    }else{
-        player.pause();
-    }
-
-    updatePlayButtons();
-}
-
-playPause.addEventListener('click',togglePlay);
-
-bigPlay.addEventListener('click',()=>{
-
-    if(!currentUrl){
-        channels[0].click();
-        return;
-    }
-
-    togglePlay();
-});
-
-/* ========= LOAD CHANNEL ========= */
-
-async function loadChannel(url,name){
-
-    currentUrl = url;
-
-    overlay.classList.add('hidden');
-
-    showLoader();
-
-    cleanupPlayer();
-
-    if(isCasting && castSession){
-        loadMediaOnCast(url,name);
-        hideLoader();
-        return;
-    }
-
-    if(Hls.isSupported()){
-
-        hls = new Hls({
-            enableWorker:true,
-            lowLatencyMode:true,
-            backBufferLength:90,
-            maxBufferLength:30
-        });
-
-        hls.loadSource(url);
-        hls.attachMedia(player);
-
-        hls.on(Hls.Events.MANIFEST_PARSED, async ()=>{
-
-            hideLoader();
-
-            try{
-                await player.play();
-            }catch(e){
-                overlay.classList.remove('hidden');
-            }
-
-            updatePlayButtons();
-        });
-
-        hls.on(Hls.Events.ERROR,function(event,data){
-
-            console.error('HLS ERROR',data);
-
-            if(data.fatal){
-
-                switch(data.type){
-
-                    case Hls.ErrorTypes.NETWORK_ERROR:
-                        hls.startLoad();
-                        break;
-
-                    case Hls.ErrorTypes.MEDIA_ERROR:
-                        hls.recoverMediaError();
-                        break;
-
-                    default:
-                        alert('Error cargando transmisión');
-                        cleanupPlayer();
-                        break;
-                }
-            }
-        });
-
-    }else if(player.canPlayType('application/vnd.apple.mpegurl')){
-
-        player.src = url;
-
-        player.addEventListener('loadedmetadata',async ()=>{
-
-            hideLoader();
-
-            try{
-                await player.play();
-            }catch(e){
-                overlay.classList.remove('hidden');
-            }
-
-        },{once:true});
-    }
-}
-
-/* ========= CLEANUP ========= */
-
-function cleanupPlayer(){
-
-    player.pause();
-
-    player.removeAttribute('src');
-
-    player.load();
-
-    if(hls){
-        hls.destroy();
-        hls = null;
-    }
-}
-
-/* ========= CHANNELS ========= */
-
-channels.forEach(channel=>{
-
-    channel.addEventListener('click',()=>{
-
-        channels.forEach(c=>c.classList.remove('active'));
-
-        channel.classList.add('active');
-
-        currentChannel = channel;
-
-        loadChannel(
-            channel.dataset.url,
-            channel.dataset.name
-        );
-    });
-});
-
-/* ========= VIDEO EVENTS ========= */
-
-player.addEventListener('play',async ()=>{
-
-    updatePlayButtons();
-
-    try{
-        if('wakeLock' in navigator){
-            wakeLock = await navigator.wakeLock.request('screen');
-        }
-    }catch(e){}
-});
-
-player.addEventListener('pause',()=>{
-
-    updatePlayButtons();
-
-    if(wakeLock){
-        wakeLock.release();
-        wakeLock = null;
-    }
-});
-
-player.addEventListener('waiting',showLoader);
-player.addEventListener('playing',hideLoader);
-
-player.addEventListener('error',()=>{
-    hideLoader();
-    alert('Error reproduciendo el canal');
-});
-
-/* ========= FULLSCREEN ========= */
-
-fullscreenBtn.addEventListener('click',()=>{
-
-    if(document.fullscreenElement){
-        document.exitFullscreen();
-    }else{
-
-        if(videoContainer.requestFullscreen){
-            videoContainer.requestFullscreen();
-        }else if(videoContainer.webkitRequestFullscreen){
-            videoContainer.webkitRequestFullscreen();
-        }
-    }
-});
-
-/* ========= PIP ========= */
-
-pipBtn.addEventListener('click',async ()=>{
-
-    try{
-
-        if(document.pictureInPictureElement){
-            await document.exitPictureInPicture();
-        }else{
-            await player.requestPictureInPicture();
-        }
-
-    }catch(e){}
-});
-
-/* ========= PROGRESS ========= */
-
-setInterval(()=>{
-
-    if(
-        !player.paused &&
-        isFinite(player.duration)
-    ){
-
-        const percent = (player.currentTime / player.duration) * 100;
-
-        progressFill.style.width = percent + '%';
-    }
-
-},1000);
-
-/* ========= KEYBOARD ========= */
-
-document.addEventListener('keydown',(e)=>{
-
-    if(e.code === 'Space'){
-        e.preventDefault();
-        togglePlay();
-    }
-
-    if(e.code === 'ArrowRight'){
-
-        const active = [...channels].findIndex(c=>c.classList.contains('active'));
-
-        if(active < channels.length - 1){
-            channels[active + 1].click();
-        }
-    }
-
-    if(e.code === 'ArrowLeft'){
-
-        const active = [...channels].findIndex(c=>c.classList.contains('active'));
-
-        if(active > 0){
-            channels[active - 1].click();
-        }
-    }
-});
-
-/* ========= CHROMECAST ========= */
-
-window['__onGCastApiAvailable'] = function(isAvailable){
-
-    if(isAvailable){
-        initializeCastApi();
-    }
-};
-
-function initializeCastApi(){
-
-    cast.framework.CastContext.getInstance().setOptions({
-        receiverApplicationId:chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
-        autoJoinPolicy:chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
-    });
-
-    cast.framework.CastContext.getInstance().addEventListener(
-        cast.framework.CastContextEventType.SESSION_STATE_CHANGED,
-        function(event){
-
-            switch(event.sessionState){
-
-                case cast.framework.SessionState.SESSION_STARTED:
-                case cast.framework.SessionState.SESSION_RESUMED:
-
-                    castSession = cast.framework.CastContext.getInstance().getCurrentSession();
-
-                    isCasting = true;
-
-                    castBtn.classList.add('connected');
-
-                    if(currentChannel){
-
-                        loadMediaOnCast(
-                            currentChannel.dataset.url,
-                            currentChannel.dataset.name
-                        );
-                    }
-
-                    break;
-
-                case cast.framework.SessionState.SESSION_ENDED:
-
-                    castSession = null;
-
-                    isCasting = false;
-
-                    castBtn.classList.remove('connected');
-
-                    if(currentChannel){
-
-                        loadChannel(
-                            currentChannel.dataset.url,
-                            currentChannel.dataset.name
-                        );
-                    }
-
-                    break;
-            }
-        }
-    );
-}
-
-castBtn.addEventListener('click',()=>{
-
-    if(isCasting){
-
-        cast.framework.CastContext
-        .getInstance()
-        .endCurrentSession(true);
-
-    }else{
-
-        cast.framework.CastContext
-        .getInstance()
-        .requestSession();
-    }
-});
-
-function loadMediaOnCast(url,name){
-
-    if(!castSession) return;
-
-    const mediaInfo = new chrome.cast.media.MediaInfo(
-        url,
-        'application/x-mpegURL'
-    );
-
-    mediaInfo.metadata = new chrome.cast.media.TvShowMediaMetadata();
-
-    mediaInfo.metadata.title = name;
-    mediaInfo.metadata.subtitle = 'En vivo';
-
-    const request = new chrome.cast.media.LoadRequest(mediaInfo);
-
-    request.autoplay = true;
-
-    castSession.loadMedia(request)
-    .then(()=>{
-        console.log('Cast conectado');
-    })
-    .catch(err=>{
-        console.error(err);
-    });
-}
-
-/* ========= AUTO START ========= */
-
-channels[0].click();
 </script>
-
 </body>
 </html>
